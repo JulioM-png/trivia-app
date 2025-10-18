@@ -9,10 +9,22 @@ const categories = ref([])
 
 export default function useAPI() {
     const getCategories = async () => {
-        if (categories.value.ength === 0) {
+        if (categories.value.length === 0) {
             const response = await instance.get('api_category.php')
             categories.value = response.data.trivia_categories
         }
     }
-    return { instance, categories, getCategories}
+
+    const getQuestion = async (categoryId) => {
+        const response = await instance.get('api.php', {
+            params: {
+                amount: 1,
+                category: categoryId,
+            }
+        })
+
+        return response.data.results[0]
+    }
+    
+    return { instance, categories, getCategories, getQuestion}
 }
